@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>RPG Enemy Tracker Beta</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+    <body ng-app="enemyTracker">
+        <div class="topnav">
+            <img src="img/target_green.svg" class="headerLogo" alt="Logo" />
+            <a href="#">RPG Enemy Tracker</a>
+        </div>
+
+        <div ng-controller="enemyCtrl">
+
+            <div class="sidebar cursor">
+                <input type="text" class="searchTerm rq-form-element" ng-model="search.Name">
+                <i></i>
+                <div class="monsterResults">
+                    <a ng-repeat="enemy in enemyIndex | filter:search:strict" ng-click="addEnemy(enemy)" href="#">{{enemy.Name}}</a>
+                </div>
+            </div>
+
+            <div class="enemyCardContainer">
+                <div ng-repeat="enemy in enemies track by $index" class="enemyCard">
+                    <div class="enemyCardTitle">
+                        <div class="collapseDetails" ng-click="collapseDetails(enemy, enemy.$index)">
+                            <span ng-show="enemy.Alive && enemy.Collapsed">&plus;</span>
+                            <span ng-show="enemy.Alive && !enemy.Collapsed">&minus;</span>
+                            <span ng-show="!enemy.Alive" class="removeIcon">&#10006;</span>
+                        </div>
+                        
+                        <div class="toggleLifeButton" 
+                            ng-class="{ 'killButton': enemy.Alive, 'reviveButton': !enemy.Alive }" 
+                            ng-click="killEnemy(enemy)"></div>
+
+                        <input type="text" class="enemyName" 
+                            ng-class="{ 'dead': !enemy.Alive }"
+                            ng-model="enemy.Name" />
+
+                        <div class="enemyHealthButtons">
+                            <a href="#" class="addHealthMod" ng-click="healEnemy(enemy)"> &plus; </a>
+                            <a href="#" class="subHealthMod" ng-click="damageEnemy(enemy)"> &minus; </a>
+                        </div>
+                        <input type="text" ng-model="enemy.HP" ng-blur="setHealth(enemy)" class="enemyCardHp" />
+                    </div>
+
+                    <div class="cardDetails" ng-hide="!enemy.Alive || enemy.Collapsed">
+                        <div class="armorClassContainer">
+                            <img src="img/shield.svg" class="crIcon" />
+                            <div class="acNumber">{{enemy.AC.Total}}</div>
+                        </div>
+
+                        <table class="enemyCardStats">
+                            <tr>
+                                <th>Int</th>
+                                <th>Str</th>
+                                <th>Dex</th>
+                                <th>Cha</th>
+                                <th>Con</th>
+                                <th>Wis</th>
+                            </tr>
+                            <tr>
+                                <td>{{enemy.Stats.Int}}</td>
+                                <td>{{enemy.Stats.Str}}</td>
+                                <td>{{enemy.Stats.Dex}}</td>
+                                <td>{{enemy.Stats.Cha}}</td>
+                                <td>{{enemy.Stats.Con}}</td>
+                                <td>{{enemy.Stats.Wis}}</td>
+                            </tr>
+                        </table>
+
+                        <div class="combatRatingContainer">
+                            <img src="img/sword.svg" class="crIcon" />
+                            <div class="crNumber">{{enemy.CR}}</div>
+                        </div>
+                        
+                        <table class="enemyCardDef">
+                            <tr>
+                                <th>Fort</th>
+                                <th>Ref</th>
+                                <th>Will</th>
+                            </tr>
+                            <tr>
+                                <td>{{enemy.Saves.Fort}}</td>
+                                <td>{{enemy.Saves.Ref}}</td>
+                                <td>{{enemy.Saves.Will}}</td>
+                            </tr>
+                        </table>
+
+                        <div class="detailStats">
+                            <p>{{enemy.AC.Details}}</p>
+                        </div>
+
+                        <div class="enemyInventory">
+                            <div ng-show="enemy.SpecialAbilities">
+                                <h3 class="sectionName" ng-click="showAbilities = !showAbilities">
+                                    Abilities
+                                </h3>
+                                <ul class="inventoryList" ng-show="showAbilities">
+                                    <li>{{enemy.SpecialAbilities}}</li>
+                                </ul>
+                            </div>
+
+                            <div ng-show="enemy.SpecialAttacks">
+                                <h3 class="sectionName" ng-click="showAttacks = !showAttacks">
+                                    Attacks
+                                </h3>
+                                <ul class="inventoryList" ng-show="showAttacks">
+                                    <li>{{enemy.SpecialAttacks}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </body>
+</html>
