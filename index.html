@@ -39,9 +39,9 @@
 
             <div class="sidebar-left">
                 <a ng-click="addPlayer()" href="#"><span style="font-size: 25px;">&plus;</span> Add Player</a>
-                <ul ng-model="enemies" class="initiative columns">
+                <ul ng-model="players" class="initiative columns">
                     <!--<li draggable="true" ng-repeat="char in enemies | filter: { Alive: true }" class="column playerCharacter" ng-class="{'nonPlayerCharacter': !char.Player}">-->
-                    <li draggable="true" ng-repeat="char in enemies | filter: { Player: true }" class="playerCharacter" ng-class="{'nonPlayerCharacter': !char.Player}">
+                    <li draggable="true" ng-repeat="char in players" class="playerCharacter" ng-class="{'nonPlayerCharacter': !char.Player}">
                         <input type="text" ng-model="char.Name" class="playerCharacterName" />
                         
                         <img src="img/shield.svg" class="initiativeCrIcon" />

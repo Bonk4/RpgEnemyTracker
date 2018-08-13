@@ -7,6 +7,8 @@ app.controller("enemyCtrl", function($scope, $http, ModalService) {
     //set base scope variables
     $scope.enemies = [];
     $scope.enemyIndex = [];
+
+    $scope.players = [];
     $scope.customEnemy = {
             Player: false,
             Name: "Zion",
@@ -51,7 +53,7 @@ app.controller("enemyCtrl", function($scope, $http, ModalService) {
     }
 
     $scope.addPlayer = function() {
-        $scope.enemies.push({
+        $scope.players.push({
             Player: true,
             Name: "Todd",
             HP: 10,
