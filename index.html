@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>RPG Enemy Tracker Beta</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <title>PathTracker Beta</title>
+    <!--
+        third-party scripts used:
+            Angular
+            jQuery
+            Draggable Lists CSS/JS found at: https://codepen.io/retrofuturistic/pen/tlbHE
+                by: retrofuturistic
+
+    -->
+
+    <!-- third party scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="app.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="js/underscore/underscore-min.js"></script>
+
+    <!-- js -->
+    <!--<script type="text/javascript" src="js/sortable.js"></script>-->
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/modal/modalService.js"></script>
+    <script type="text/javascript" src="js/modal/modalDirective.js"></script>
+    <script src="js/draggableLists.js"></script>
+
+    <!-- style sheets -->
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/modal.css">
+    <link rel="stylesheet" type="text/css" href="styles/draggableLists.css">
+
 </head>
-    <body ng-app="enemyTracker">
+    <body ng-app="pathTracker">
         <div class="topnav">
             <img src="img/target_green.svg" class="headerLogo" alt="Logo" />
-            <a href="#">RPG Enemy Tracker</a>
+            <a href="#">PathTracker</a>
         </div>
 
         <div ng-controller="enemyCtrl">
 
-            <div class="sidebar cursor">
-                <input type="text" class="searchTerm rq-form-element" ng-model="search.Name">
-                <i></i>
-                <div class="monsterResults">
-                    <a ng-repeat="enemy in enemyIndex | filter:search:strict" ng-click="addEnemy(enemy)" href="#">{{enemy.Name}}</a>
-                </div>
+            <div class="sidebar-left">
+                <a ng-click="addPlayer()" href="#"><span style="font-size: 25px;">&plus;</span> Add Player</a>
+                <ul ng-model="enemies" class="initiative columns">
+                    <!--<li draggable="true" ng-repeat="char in enemies | filter: { Alive: true }" class="column playerCharacter" ng-class="{'nonPlayerCharacter': !char.Player}">-->
+                    <li draggable="true" ng-repeat="char in enemies | filter: { Player: true }" class="playerCharacter" ng-class="{'nonPlayerCharacter': !char.Player}">
+                        <input type="text" ng-model="char.Name" class="playerCharacterName" />
+                        
+                        <img src="img/shield.svg" class="initiativeCrIcon" />
+                        <input type="text" ng-model="char.AC.Total" ng-blur="setHealth(char)" class="playerCharacterAC" ng-if="char.Player" />
+                        <div ng-blur="setHealth(char)" class="playerCharacterAC" ng-if="!char.Player">{{char.AC.Total}}</div>
+                    </li>
+                </ul>
             </div>
 
             <div class="enemyCardContainer">
-                <div ng-repeat="enemy in enemies track by $index" class="enemyCard">
+                <div ng-repeat="enemy in enemies | filter: { Player: false } track by $index " class="enemyCard" ng-style="enemy.Color">
                     <div class="enemyCardTitle">
-                        <div class="collapseDetails" ng-click="collapseDetails(enemy, enemy.$index)">
+                        <div class="collapseDetails" ng-click="collapseDetails(enemy, $index)">
                             <span ng-show="enemy.Alive && enemy.Collapsed">&plus;</span>
                             <span ng-show="enemy.Alive && !enemy.Collapsed">&minus;</span>
                             <span ng-show="!enemy.Alive" class="removeIcon">&#10006;</span>
@@ -44,7 +72,7 @@
                             <a href="#" class="addHealthMod" ng-click="healEnemy(enemy)"> &plus; </a>
                             <a href="#" class="subHealthMod" ng-click="damageEnemy(enemy)"> &minus; </a>
                         </div>
-                        <input type="text" ng-model="enemy.HP" ng-blur="setHealth(enemy)" class="enemyCardHp" />
+                        <input type="text" ng-model="enemy.HP" ng-blur="setHealth(enemy)" class="enemyHealth" />
                     </div>
 
                     <div class="cardDetails" ng-hide="!enemy.Alive || enemy.Collapsed">
@@ -113,10 +141,104 @@
                                 </ul>
                             </div>
                         </div>
+
+                        <div class="colorPallettes">
+                            <div class="pallette" style="background-color: blue" ng-click="enemy.Color={'background-color': '#93A8AC' }"></div>
+                            <div class="pallette" style="background-color: red" ng-click="enemy.Color={'background-color': '#CC998D' }"></div>
+                            <div class="pallette" style="background-color: grey" ng-click="enemy.Color={'background-color': '#BCBDC0' }"></div>
+                            <div class="pallette" style="background-color: green" ng-click="enemy.Color={}"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            
+
+            <div class="sidebar">
+                <input type="text" class="searchTerm rq-form-element" ng-model="search.Name">
+                
+                <div class="monsterResults">
+                    <a ng-click="openModal('custom-enemy')" href="#">Add Custom Enemy</a>
+                    <a ng-repeat="enemy in enemyIndex | filter:search.Name" ng-click="addEnemy(enemy)" href="#">{{enemy.Name}}</a>
+                </div>
+            </div>
         </div>
+       
+            <!--Modals-->
+            <modal id="custom-enemy">
+                <div class="modal">
+                    <div class="modal-body enemyCard">
+                        <div class="enemyCardTitle">
+                            <div class="collapseDetails" ng-click="collapseDetails(enemy, $index)">
+                                <span ng-show="customEnemy.Alive && customEnemy.Collapsed">&plus;</span>
+                                <span ng-show="customEnemy.Alive && !customEnemy.Collapsed">&minus;</span>
+                                <span ng-show="!customEnemy.Alive" class="removeIcon">&#10006;</span>
+                            </div>
+
+                            <input type="text" class="enemyName" 
+                                ng-class="{ 'dead': !customEnemy.Alive }"
+                                ng-model="customEnemy.Name" />
+
+                            <input type="text" ng-model="customEnemy.HP" ng-blur="setHealth(customEnemy)" class="enemyHealth" />
+                        </div>
+
+                        <div class="cardDetails">
+                            <div class="armorClassContainer">
+                                <img src="img/shield.svg" class="crIcon" />
+                                <input class="acNumber" ng-model="customEnemy.AC.Total">
+                            </div>
+
+                            <table class="enemyCardStats">
+                                <tr>
+                                    <th>Int</th>
+                                    <th>Str</th>
+                                    <th>Dex</th>
+                                    <th>Cha</th>
+                                    <th>Con</th>
+                                    <th>Wis</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Int"></td>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Str"></td>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Dex"></td>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Cha"></td>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Con"></td>
+                                    <td><input type="text" ng-model="customEnemy.Stats.Wis"></td>
+                                </tr>
+                            </table>
+
+                            <div class="combatRatingContainer">
+                                <img src="img/sword.svg" class="crIcon" />
+                                <div class="crNumber"><input type="text" ng-model="customEnemy.CR"></div>
+                            </div>
+                            
+                            <table class="enemyCardDef">
+                                <tr>
+                                    <th>Fort</th>
+                                    <th>Ref</th>
+                                    <th>Will</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" ng-model="customEnemy.Saves.Fort"></td>
+                                    <td><input type="text" ng-model="customEnemy.Saves.Ref"></td>
+                                    <td><input type="text" ng-model="customEnemy.Saves.Will"></td>
+                                </tr>
+                            </table>
+
+                            <div class="detailStats">
+                                <input type=text" ng-model="customEnemy.AC.Details">
+                            </div>
+
+                            <button ng-click="submitCustomEnemy()" class="submitButton">Submit</button>
+
+                            <div class="colorPallettes">
+                                <div class="pallette" style="background-color: blue" ng-click="customEnemy.Color={'background-color': '#93A8AC' }"></div>
+                                <div class="pallette" style="background-color: red" ng-click="customEnemy.Color={'background-color': '#CC998D' }"></div>
+                                <div class="pallette" style="background-color: grey" ng-click="customEnemy.Color={'background-color': '#BCBDC0' }"></div>
+                                <div class="pallette" style="background-color: green" ng-click="customEnemy.Color={}"></div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="modal-background"></div>
+            </modal>
     </body>
 </html>

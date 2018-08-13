@@ -1,0 +1,415 @@
+@font-face { font-family: 'Segoe UI Bold'; src: url('../fonts/Segoe UI Bold.ttf');}
+
+body {
+    font-family: 'Segoe UI';
+    background-color: #415D43;
+    margin: 0;
+}
+
+.headerLogo {
+    float:left;
+    height: 75px;
+    width: 75px;
+}
+
+.topnav {
+    height: 80px;
+    font-family: 'Segoe UI Bold';
+    overflow: hidden;
+    background-color: #333;
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+  }
+  
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 35px;
+}
+
+th, td {
+    width: 10px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th {
+    color: #000;
+}
+
+.sidebar {
+    font-size: 20px;
+    color: #818181;
+}
+
+.sidebar-left {
+    font-size: 20px;
+    color: #818181;
+}
+
+.sidebar {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 120px;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+}
+
+.sidebar a {
+    padding: 15px 8px 0px 20px;
+    text-decoration: none;
+    display: block;
+    color: #818181;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+    text-decoration: none;
+}
+
+.sidebar-left {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 120px;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+}
+
+.sidebar-left a {
+    padding: 15px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+}
+
+.sidebar-left a:hover {
+    color: #f1f1f1;
+    text-decoration: none;
+}
+
+.searchTerm {
+    padding: 6px 8px 6px 16px;
+    position: fixed;
+    color: #f1f1f1;
+    font-size: 25px;
+    background: #111;
+    border: none;
+    border-bottom: 1px #818181 solid;
+    outline: none;
+}
+
+.initiative {
+    padding: 0 8px 6px 0;
+    list-style-type: none;
+}
+
+.monsterResults {
+    margin-top: 50px;
+}
+
+.enemyCardContainer{
+    margin-left: 300px;
+    margin-right: 300px;
+    padding-top: 120px;
+}
+
+.enemyCard {
+    background-color: #709775;
+    color: #f1f1f1;
+    border-radius: 25px;
+    min-width: 300px;
+    min-height:20px;
+    width: 350px;
+    padding: 15px;
+    margin: 15px;
+    float: left;
+    overflow: auto;
+}
+
+.enemyHealth {
+    float: right;
+    text-align: right;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 30px;
+    font-family: 'Segoe UI Bold';
+    color: darkred;
+    width: 75px;
+    padding-right: 20px;
+}
+
+.toggleLifeButton {
+    float:left;
+    margin: 8px 8px 8px 20px;
+    display: block;
+    height: 25px;
+    width: 25px;
+    background-size: 25px 25px;
+}
+
+.toggleLifeButton:hover { 
+    cursor: pointer;
+}
+
+.killButton { 
+    background-image: url('../img/skull.svg');
+}
+
+.reviveButton{
+    background-image: url('../img/love.svg');
+}
+
+.enemyCardTitle {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.enemyName {
+    font-family: 'Segoe UI Bold';
+    font-size: 20px;
+    margin-top: 5px;
+    width: 57%;
+    float: left;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.enemyHealthButtons {
+    position: relative;
+    float: right;
+    width: 30px;
+    display: block;
+    font-size: 17px;
+    font-family: 'Segoe UI Bold';
+    text-align: center;
+    top: -5px;
+}
+
+.enemyCardStats {
+    text-align: center;
+    float:right;
+    width: 85%;
+    height: 50px;
+}
+
+.enemyCardDef {
+    text-align: center;
+    float:right;
+    width: 85%;
+    height: 50px;
+    margin-top: -1px;
+}
+
+.collapseDetails {
+    position: absolute;
+    color: #000;
+    font-size: 20px;
+    font-family: 'Segoe UI Bold';
+    left: -2px;
+    top: 5px;
+}
+
+.collapseDetails:hover {
+    cursor: pointer;
+}
+
+.collapseDetails:hover enemyName {
+    text-decoration: underline;
+}
+
+.enemyCardStatsItem {
+    display: inline-block;
+}
+
+.combatRatingContainer {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+
+.armorClassContainer {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+
+.crIcon {
+    position: absolute;
+    width: 25px;
+    left: 0px;
+    top: 12px;
+    float: left;
+}
+
+.initiativeCrIcon {
+    position: fixed;
+    width: 35px;
+    padding-left: 20px;
+    padding-top: 4px;
+    z-index: 0;
+}
+
+.acNumber {
+    position: absolute;
+    width: 100%;
+    color: #d3d300;
+    font-family: 'Segoe UI Bold';
+    font-size: 30px;
+    right: 5px;
+    top: 5px;
+    text-align: right;
+}
+
+.crNumber {
+    position: absolute;
+    width: 100%;
+    color: #b20000;
+    font-family: 'Segoe UI Bold';
+    font-size: 30px;
+    right: 5px;
+    top: 5px;
+    text-align: right;
+}
+
+.addHealthMod {
+    position: absolute;
+    height: 30px;
+    width: 20px;
+    text-decoration: none;
+    font-size: 25px;
+    top: -5px;
+    color: green;
+}
+
+.subHealthMod {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    text-decoration: none;
+    font-size: 20px;
+    top: 25px;
+    color: darkred;
+}
+
+.enemyInventory {
+    padding-top: 50px;
+}
+
+.inventoryList {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.inventoryDescription {
+    font-style: italic;
+}
+
+.cardDetailList {
+    font-size: 15px;
+}
+
+.sectionName:hover { 
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.detailStats p {
+    position: relative;
+    width: 85%;
+    float: right;
+    text-align: right;
+    font-style: italic;
+    font-size: 14px;
+}
+
+.removeIcon {
+    font-size: 15px;
+    padding-left: 2px;
+}
+
+.dead {
+    text-decoration: line-through;
+    color: darkred;
+}
+
+.playerCharacter {
+    background-color: #187795;
+    color: #f1f1f1;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 15px;
+    height: 40px;
+    width:89%;
+}
+
+.nonPlayerCharacter {
+    background-color: #A8201A !important;
+}
+
+.playerCharacterName {
+    font-family: 'Segoe UI Bold';
+    font-size: 23px;
+    color: #f1f1f1;
+
+    margin-top: 5px;
+    width: 75%;
+    float: left;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.playerCharacterAC {
+    font-family: 'Segoe UI Bold';
+    font-size: 30px;
+    color: #f1f1f1;
+    float: right;
+    text-align: right;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 25%;
+    z-index: 0;
+    position: absolute;
+    right: 20px;
+}
+
+.submitButton {
+    height: 30px;
+    width: 60px;
+    background-color: black;
+}
+
+.colorPalletes {
+    height: 30px;
+    float: right;
+}
+
+.pallette {
+    height: 15px;
+    width: 15px;
+    margin: 8px 5px 7px 5px;
+    border-radius: 5px;
+    float:right;
+}
